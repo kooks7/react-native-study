@@ -240,4 +240,171 @@
         }
         ```
 
-        
+      #### 날씨 API 가져오기
+
+      * Open Weather 사이트 이용하기
+
+      1. `npm i --save axios`
+
+      2. **App.js** 
+
+         * API 데이터 가져오는 메소드 생성
+
+           ```react
+             getWeather = async (latitude, longitude) => {
+               const { data } = await axios.get(
+                 `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`
+               );
+             };
+           ```
+
+      3. **Weather.js**
+
+         * `npm i prop-types`
+
+         * 컴포넌트 만들기
+
+           ```react
+           import React from 'react';
+           import { StyleSheet, Text, View } from 'react-native';
+           import PropTypes from 'prop-types';
+           
+           export default function Weather({ temp }) {
+             return (
+               <View style={styles.container}>
+                 <Text>{temp}</Text>
+               </View>
+             );
+           }
+           
+           Weather.PropTypes = {
+             temp: propTypes.number.isRequired
+           };
+           
+           const styles = StyleSheet.create({
+             container: {
+               flex: 1,
+               justifyContent: 'center',
+               alignItems: 'center'
+             }
+           });
+           
+           ```
+
+      4. **App.js**
+
+         * 렌더링하기
+
+           ```react
+             render() {
+               const { isLoading, temp } = this.state;
+               return isLoading ? <Loading /> : <Weather temp={temp} />;
+             }
+           ```
+
+      #### condition 가져오기
+
+      1. **Weather.js**
+
+         * condition `PropTypes`추가해주기
+
+           ```react
+           Weather.propTypes = {
+             temp: PropTypes.number.isRequired,
+             condition: PropTypes.oneOf([
+               'Thunderstorm',
+               'Drizzle',
+               'Rain',
+               'Snow',
+               'Atmosphere',
+               'Clear',
+               'Clouds'
+             ]).isRequired
+           };
+           
+           ```
+
+      2. **App.js**
+
+         * API 데이터 es6문법 이용해서 다시 담기
+
+           ```react
+           getWeather = async (latitude, longitude) => {
+               const {
+                 data: {
+                   main: { temp },
+                   weather
+                 }
+               } = await axios.get(
+                 `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+               );
+           ```
+
+      우선 목록이 너무 많으므로 뛰어넘도록 합시다.
+
+#### expo/vector-icons 사용하기
+
+* icon 찾아보기
+  https://expo.github.io/vector-icons/
+
+1. **Weather.js**
+
+   * `import { MaterialCommunityIcons} from '@expo/vector-icons';` 가져오기
+
+     위 아이콘 디렉토리에서 icon famliy를 가져와서 임포트해줍니다.
+
+   * 전체 코드를 다시보자면
+
+     ```react
+     import React from 'react';
+     import { StyleSheet, Text, View } from 'react-native';
+     import PropTypes from 'prop-types';
+     // 1. icon import 해주고
+     import { MaterialCommunityIcons } from '@expo/vector-icons';
+     
+     export default function Weather({ temp }) {
+       return (
+           // 2. View 하나 더 만들고 이미지 넣고
+         <View style={styles.container}>
+           <View style={styles.halfContainer}>
+             <MaterialCommunityIcons name="weather-lightning-rainy" size={96} />
+             <Text style={styles.temp}>{temp}°C</Text>
+           </View>
+           <View style={styles.halfContainer} />
+         </View>
+       );
+     }
+     
+     Weather.propTypes = {
+       temp: PropTypes.number.isRequired,
+       condition: PropTypes.oneOf([
+         'Thunderstorm',
+         'Drizzle',
+         'Rain',
+         'Snow',
+         'Atmosphere',
+         'Clear',
+         'Clouds'
+       ]).isRequired
+     };
+     
+     // 3. styling 해주기
+     const styles = StyleSheet.create({
+       container: {
+         flex: 1,
+         justifyContent: 'center',
+         alignItems: 'center'
+       },
+       halfContainer: {
+         flex: 1,
+         justifyContent: 'center',
+         alignItems: 'center'
+       },
+       temp: {
+         fontSize: 34
+       }
+     });
+     
+     ```
+
+     

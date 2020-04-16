@@ -1,17 +1,64 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import PropTypes from 'prop-types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
-export default function Weather({ temp }) {
+const weatherOptions = {
+  Thunderstorm: {
+    iconName: 'weather-lightning-rainy',
+    kor: '천둥번개',
+    gradient: ['#283048', '#859398']
+  },
+  Drizzle: {
+    iconName: 'grain',
+    kor: '이슬비',
+    gradient: ['#757F9A', '#D7DDE8']
+  },
+  Rain: {
+    iconName: 'weather-rainy',
+    kor: '비',
+    gradient: ['##085078', '#85D8CE']
+  },
+  Snow: {
+    iconName: 'weather-snowy',
+    kor: '눈',
+    gradient: ['#D3CCE3', '#E9E4F0']
+  },
+  Haze: {
+    iconName: 'blackberry',
+    kor: '미세먼지',
+    gradient: ['#f12711', '#f5af19']
+  },
+  Clear: {
+    iconName: 'white-balance-sunny',
+    kor: '맑음',
+    gradient: ['#457fca', '#5691c8']
+  },
+  Clouds: {
+    iconName: 'weather-partlycloudy',
+    kor: '구름',
+    gradient: ['#0B486B', '#BCA9F5']
+  }
+};
+
+export default function Weather({ temp, condition }) {
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      style={styles.container}
+      colors={weatherOptions[condition].gradient}
+    >
+      <StatusBar barStyle="dark-content" />
       <View style={styles.halfContainer}>
-        <MaterialCommunityIcons name="weather-lightning-rainy" size={96} />
+        <MaterialCommunityIcons
+          name={weatherOptions[condition].iconName}
+          size={96}
+          color="white"
+        />
         <Text style={styles.temp}>{temp}°C</Text>
       </View>
       <View style={styles.halfContainer} />
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -22,7 +69,7 @@ Weather.propTypes = {
     'Drizzle',
     'Rain',
     'Snow',
-    'Atmosphere',
+    'Haze',
     'Clear',
     'Clouds'
   ]).isRequired
@@ -40,6 +87,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   temp: {
-    fontSize: 34
+    fontSize: 34,
+    color: 'white'
   }
 });

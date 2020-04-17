@@ -50,6 +50,9 @@ const weatherOptions = {
 };
 
 export default function Weather({ temp, condition }) {
+  if (!weatherOptions[condition]) {
+    condition = 'Clear';
+  }
   return (
     <LinearGradient
       style={styles.container}

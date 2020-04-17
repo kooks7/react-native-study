@@ -25,7 +25,7 @@ export default class App extends React.Component {
     );
     this.setState({
       isLoading: false,
-      temp: temp,
+      temp,
       condition: weather[0].main
     });
   };
@@ -41,9 +41,6 @@ export default class App extends React.Component {
 
       // 3. 날씨 가져오기
       this.getWeather(latitude, longitude);
-
-      // 4. Loading 완료
-      this.setState({ isLoading: false });
     } catch (error) {
       console.log(error);
       Alert.alert('위치를 찾을 수 없습니다...', '슬퍼용 ㅠㅠ');
@@ -53,6 +50,8 @@ export default class App extends React.Component {
     this.getLocation();
   }
   render() {
+    console.log('1111');
+    console.log(this.state.condition);
     const { isLoading, temp, condition } = this.state;
     return isLoading ? (
       <Loading />
